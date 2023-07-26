@@ -1,0 +1,44 @@
+import PySimpleGUI as Gui
+import base64
+
+print(Gui)
+print(Gui.version)
+print(Gui.tclversion_detailed)
+print(Gui.sys.version)
+
+Gui.theme("DarkGrey12")
+layout1 = [[Gui.Text('Plz click on the button for the option you want')],
+           [Gui.Button('Encrypt'), Gui.Button('Exit')]]
+layout2 = [[Gui.Text('Message to Encrypt: '), Gui.InputText(key='-IN-')],
+           [Gui.Button('Submit'), Gui.Button('Cancel')]]
+window1 = Gui.Window('Base64 Encryption', layout1,size=(500, 200))
+
+while True:
+    event1, values1 = window1.read()
+    if event1 == 'Encrypt':
+        window1.hide()
+        window2 = Gui.Window('Base64 Encryption', layout2, size=(500, 200))
+        while True:
+            event2, values2 = window2.read()
+            if event2 == 'Submit':
+                encrypt = values2['-IN-']
+                bytes_converted = encrypt.encode('ascii')
+                encrypted_bytes = base64.b64encode(bytes_converted)
+                encrypted = encrypted_bytes.decode('ascii')
+                layout3 = [[Gui.Text(encrypted)], [Gui.Button('THX')]]
+                window2.hide()
+                window3 = Gui.Window('Base64 Encryption', layout3,size=(500, 200))
+                while True:
+                    event3, values3 = window3.read()
+                    if event3 == 'THX' or event3 == Gui.WIN_CLOSED:
+                        window3.close()
+                        break
+                window2.un_hide()
+            if event2 == Gui.WIN_CLOSED or event2 == 'Cancel':
+                window2.close()
+                break
+        window1.un_hide()
+    if event1 == Gui.WIN_CLOSED or event1 == 'Exit':
+        break
+
+window1.close()
